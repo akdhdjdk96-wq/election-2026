@@ -340,7 +340,6 @@ if st.session_state.page == 'category':
         selected_category = st.radio("관심 있는 분야를 선택하세요:", list(data.keys()))
 
     st.title(f"📍 {selected_category}")
-    st.info(f"현재 **'{selected_category}'** 분야에 대한 모든 정당의 공약을 비교하고 있습니다.")
     
     # 해당 분야의 정당별 공약 출력
     for party, promises in data[selected_category].items():
@@ -360,7 +359,6 @@ elif st.session_state.page == 'party':
         selected_party = st.radio("공약을 확인할 정당을 선택하세요:", party_list)
 
     st.title(f"🚩 {selected_party} 핵심 공약")
-    st.success(f"현재 **'{selected_party}'**의 전체 분야 공약을 확인하고 있습니다.")
     
     # 전체 데이터에서 해당 정당의 공약만 추출하여 출력
     for category_name, party_data in data.items():
