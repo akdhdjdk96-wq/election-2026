@@ -314,23 +314,61 @@ data = {
 st.title("🗳️ 대한민국 5개 정당 공약 비교 서비스")
 st.markdown("---")
 
-# 사이드바에서 주제 선택
-st.sidebar.header("📂 공약 주제")
-category = st.sidebar.radio("원하시는 주제를 선택하세요:", list(data.keys()))
+# 4. 세션 상태 초기화 (현재 페이지 기억)
+if 'page' not in st.session_state:
+    st.session_state.page = 'category'  # 기본값: 분야별 보기
 
-# 메인 화면 출력
-st.header(f"📍 {category}")
+# 화면 전환 함수
+def set_page(page_name):
+    st.session_state.page = page_name
 
-# 선택된 주제의 정당별 공약 출력
-for party, promises in data[category].items():
-    with st.container():
+# 4. 사이드바 - 메인 메뉴 (화면 전환 버튼)
+with st.sidebar:
+    st.header("📌 메인 메뉴")
+    # 버튼 클릭 시 세션 상태 변경
+    st.button("📂 분야별로 모아보기", on_click=set_page, args=('category',), use_container_width=True)
+    st.button("🚩 정당별로 모아보기", on_click=set_page, args=('party',), use_container_width=True)
+    st.markdown("---")
+
+# 5. 각 화면별 레이아웃 구성
+# ==========================================
+# 화면 A: 분야별 보기 (Category View)
+# ==========================================
+if st.session_state.page == 'category':
+    with st.sidebar:
+        st.subheader("📂 공약 주제 선택")
+        selected_category = st.radio("관심 있는 분야를 선택하세요:", list(data.keys()))
+
+    st.title(f"📍 {selected_category}")
+    st.info(f"현재 **'{selected_category}'** 분야에 대한 모든 정당의 공약을 비교하고 있습니다.")
+    
+    # 해당 분야의 정당별 공약 출력
+    for party, promises in data[selected_category].items():
         st.subheader(f"■ {party}")
-        
-        # 공약 키워드별로 펼치기 상자(Expander) 생성
         for keyword, detail in promises.items():
             with st.expander(f"🔍 {keyword}"):
-                # 워드 파일의 상세 내용을 줄바꿈(\n) 포함하여 그대로 출력
                 st.write(detail)
-        
-        st.write("") 
-        st.divider() # 정당별 구분선
+        st.divider()
+
+# ==========================================
+# 화면 B: 정당별 보기 (Party View)
+# ==========================================
+elif st.session_state.page == 'party':
+    with st.sidebar:
+        st.subheader("🚩 정당 선택")
+        party_list = ["더불어민주당", "국민의힘", "정의당", "기본소득당", "코리아당"]
+        selected_party = st.radio("공약을 확인할 정당을 선택하세요:", party_list)
+
+    st.title(f"🚩 {selected_party} 핵심 공약")
+    st.success(f"현재 **'{selected_party}'**의 전체 분야 공약을 확인하고 있습니다.")
+    
+    # 전체 데이터에서 해당 정당의 공약만 추출하여 출력
+    for category_name, party_data in data.items():
+        if selected_party in party_data:
+            with st.container():
+                st.subheader(f"📍 {category_name}")
+                promises = party_data[selected_party]
+                for keyword, detail in promises.items():
+                    with st.expander(f"🔍 {keyword}"):
+                        st.write(detail)
+                st.write("")
