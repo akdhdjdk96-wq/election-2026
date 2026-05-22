@@ -3,7 +3,7 @@ import streamlit as st
 # 1. 화면 설정
 st.set_page_config(page_title="2026 후보자 공약 비교", layout="wide")
 
-# 2. 데이터 보관함 (이미지 10장의 텍스트를 100% 그대로 반영)
+# 2. 데이터 보관함
 data = {
     "1. 경제 / 일자리": {
         "정원오": {
@@ -327,7 +327,7 @@ data = {
 }
 
 # 3. 화면 UI 구성 (사이드바 + 메인)
-st.title("🗳️ 대한민국 5개 정당 공약 비교 서비스")
+st.title("🗳️ 서울시지사 후보자 공약 비교 서비스")
 st.markdown("---")
 
 # 4. 세션 상태 초기화 (현재 페이지 기억)
@@ -343,7 +343,7 @@ with st.sidebar:
     st.header("📌 메인 메뉴")
     # 버튼 클릭 시 세션 상태 변경
     st.button("📂 분야별로 모아보기", on_click=set_page, args=('category',), use_container_width=True)
-    st.button("🚩 정당별로 모아보기", on_click=set_page, args=('party',), use_container_width=True)
+    st.button("🚩 후보자별로 모아보기", on_click=set_page, args=('party',), use_container_width=True)
     st.markdown("---")
 
 # 5. 각 화면별 레이아웃 구성
@@ -357,7 +357,7 @@ if st.session_state.page == 'category':
 
     st.title(f"📍 {selected_category}")
     
-    # 해당 분야의 정당별 공약 출력
+    # 해당 분야의 후보자별 공약 출력
     for party, promises in data[selected_category].items():
         st.subheader(f"■ {party}")
         for keyword, detail in promises.items():
@@ -366,17 +366,17 @@ if st.session_state.page == 'category':
         st.divider()
 
 # ==========================================
-# 화면 B: 정당별 보기 (Party View)
+# 화면 B: 후보자별 보기 (Party View)
 # ==========================================
 elif st.session_state.page == 'party':
     with st.sidebar:
-        st.subheader("🚩 정당 선택")
-        party_list = ["더불어민주당", "국민의힘", "정의당", "기본소득당", "코리아당"]
-        selected_party = st.radio("공약을 확인할 정당을 선택하세요:", party_list)
+        st.subheader("🚩 후보자 선택")
+        party_list = ["정원오", "오세훈", "김정철", "유지혜", "이강산", "권영국"]
+        selected_party = st.radio("공약을 확인할 후보자를 선택하세요:", party_list)
 
     st.title(f"🚩 {selected_party} 핵심 공약")
     
-    # 전체 데이터에서 해당 정당의 공약만 추출하여 출력
+    # 전체 데이터에서 해당 후보자의 공약만 추출하여 출력
     for category_name, party_data in data.items():
         if selected_party in party_data:
             with st.container():
