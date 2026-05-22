@@ -412,7 +412,7 @@ if st.session_state.page == 'category':
 elif st.session_state.page == 'party':
     with st.sidebar:
         st.subheader("🚩 후보자 선택")
-        party_list = ["정원오(더불어민주당)", "오세훈(국민의힘)", "김정철(개혁신당)", "유지혜(여성의당)", "이강산(자유통일당)", "권영국(정의당)"]
+        party_list = ["정원오 (더불어민주당)", "오세훈 (국민의힘)", "김정철 (개혁신당)", "유지혜 (여성의당)", "이강산 (자유통일당)", "권영국 (정의당)"]
         selected_party = st.radio("공약을 확인할 후보자를 선택하세요:", party_list)
 
     st.title(f"🚩 {selected_party} 핵심 공약")
